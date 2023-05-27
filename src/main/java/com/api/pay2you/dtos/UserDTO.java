@@ -12,28 +12,28 @@ import jakarta.persistence.GenerationType;
 
 public class UserDTO {
 
-private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;
+
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	private String document;
-	private UUID user_client;
+	private UUID user_key;
 	private String user_secret;
 	private String email;
 	private String name;
 	private String recovery_pass_token;
 	private Instant created_at;
-	
+
 	public UserDTO() {
-		
+
 	}
 
-	public UserDTO(String id, String document, String email, String name,String recovery_pass_token) {
+	public UserDTO(String id, String document, String email, String name, String recovery_pass_token) {
 		
 		this.id = id;
 		this.document = document;
-		this.setUser_client();
-		this.setUser_secret();
+		this.user_key = generateUserKey();
+		this.user_secret = generateUserSecret();
 		this.email = email;
 		this.name = name;
 		this.recovery_pass_token = recovery_pass_token;
@@ -43,7 +43,7 @@ private static final long serialVersionUID = 1L;
 	public UserDTO(User user) {
 		this.id = user.getId();
 		this.document = user.getDocument();
-		this.user_client = user.getUser_client();
+		this.user_key = user.getUser_key();
 		this.user_secret = user.getUser_secret();
 		this.email = user.getEmail();
 		this.name = user.getName();
@@ -53,6 +53,26 @@ private static final long serialVersionUID = 1L;
 
 	public String getId() {
 		return id;
+	}
+
+	public UUID generateUserKey() {
+		UUID userKey = UUID.randomUUID();
+		setUser_key(userKey);
+		return userKey;
+	}
+
+	public String generateUserSecret() {
+		String generatedPassword = ApiUtils.generatePassword();
+		setUser_secret(generatedPassword);
+		return generatedPassword;
+	}
+	
+	public void setUser_key(UUID user_client) {
+		this.user_key = user_client;
+	}
+
+	public void setUser_secret(String user_secret) {
+		this.user_secret = user_secret;
 	}
 
 	public void setId(String id) {
@@ -67,20 +87,12 @@ private static final long serialVersionUID = 1L;
 		this.document = document;
 	}
 
-	public UUID getUser_client() {
-		return user_client;
-	}
-
-	public void setUser_client() {		
-		this.user_client = UUID.randomUUID();
+	public UUID getUser_key() {
+		return user_key;
 	}
 
 	public String getUser_secret() {
 		return user_secret;
-	}
-
-	public void setUser_secret() {
-		this.user_secret = ApiUtils.generatePassword();
 	}
 
 	public String getEmail() {
@@ -117,7 +129,7 @@ private static final long serialVersionUID = 1L;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(created_at, document, email, id, name, recovery_pass_token, user_client, user_secret);
+		return Objects.hash(created_at, document, email, id, name, recovery_pass_token, user_key, user_secret);
 	}
 
 	@Override
@@ -131,13 +143,15 @@ private static final long serialVersionUID = 1L;
 		User other = (User) obj;
 		return Objects.equals(created_at, other.getCreated_at()) && Objects.equals(document, other.getDocument())
 				&& Objects.equals(email, other.getEmail()) && Objects.equals(id, other.getId())
-				&& Objects.equals(name, other.getName()) && Objects.equals(recovery_pass_token, other.getRecovery_pass_token())
-				&& Objects.equals(user_client, other.getUser_client()) && Objects.equals(user_secret, other.getUser_secret());
+				&& Objects.equals(name, other.getName())
+				&& Objects.equals(recovery_pass_token, other.getRecovery_pass_token())
+				&& Objects.equals(user_key, other.getUser_key())
+				&& Objects.equals(user_secret, other.getUser_secret());
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", document=" + document + ", user_client=" + user_client + ", user_secret="
+		return "User [id=" + id + ", document=" + document + ", user_key=" + user_key + ", user_secret="
 				+ user_secret + ", email=" + email + ", name=" + name + ", recovery_pass_token=" + recovery_pass_token
 				+ ", created_at=" + created_at + "]";
 	}
@@ -145,6 +159,5 @@ private static final long serialVersionUID = 1L;
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-}
 
+}

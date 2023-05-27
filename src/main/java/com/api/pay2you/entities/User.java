@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.api.pay2you.utils.ApiUtils;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +23,7 @@ public class User implements Serializable{
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	private String document;
-	private UUID user_client;
+	private UUID user_key;
 	private String user_secret;
 	private String email;
 	private String name;
@@ -32,13 +34,13 @@ public class User implements Serializable{
 		
 	}
 
-	public User(String id, String document, UUID user_client, String user_secret, String email, String name,
+	public User(String id, String document, UUID user_key, String user_secret, String email, String name,
 			String recovery_pass_token, Instant created_at) {
 		super();
 		this.id = id;
 		this.document = document;
-		this.user_client = user_client;
-		this.user_secret = user_secret;
+		this.user_key = user_key;
+		this.user_secret = ApiUtils.PasswordEncode(user_secret);
 		this.email = email;
 		this.name = name;
 		this.recovery_pass_token = recovery_pass_token;
@@ -61,12 +63,12 @@ public class User implements Serializable{
 		this.document = document;
 	}
 
-	public UUID getUser_client() {
-		return user_client;
+	public UUID getUser_key() {
+		return user_key;
 	}
 
-	public void setUser_client(UUID user_client) {
-		this.user_client = user_client;
+	public void setUser_client(UUID user_key) {
+		this.user_key = user_key;
 	}
 
 	public String getUser_secret() {
@@ -111,7 +113,7 @@ public class User implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(created_at, document, email, id, name, recovery_pass_token, user_client, user_secret);
+		return Objects.hash(created_at, document, email, id, name, recovery_pass_token, user_key, user_secret);
 	}
 
 	@Override
@@ -126,12 +128,12 @@ public class User implements Serializable{
 		return Objects.equals(created_at, other.created_at) && Objects.equals(document, other.document)
 				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
 				&& Objects.equals(name, other.name) && Objects.equals(recovery_pass_token, other.recovery_pass_token)
-				&& Objects.equals(user_client, other.user_client) && Objects.equals(user_secret, other.user_secret);
+				&& Objects.equals(user_key, other.user_key) && Objects.equals(user_secret, other.user_secret);
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", document=" + document + ", user_client=" + user_client + ", user_secret="
+		return "User [id=" + id + ", document=" + document + ", user_key=" + user_key + ", user_secret="
 				+ user_secret + ", email=" + email + ", name=" + name + ", recovery_pass_token=" + recovery_pass_token
 				+ ", created_at=" + created_at + "]";
 	}

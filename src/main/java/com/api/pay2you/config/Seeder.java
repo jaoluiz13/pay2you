@@ -25,7 +25,9 @@ public class Seeder implements CommandLineRunner {
 
 	private void seedUsersTable() {
 
-		User user = new User(null, "57971474083", UUID.randomUUID(), ApiUtils.generatePassword(), "jxvxluiz@gmail.com",
+		String password = ApiUtils.PasswordEncode(ApiUtils.generatePassword());
+		
+		User user = new User(null, "57971474083", UUID.randomUUID(), password, "jxvxluiz@gmail.com",
 				"João Luiz", "", Instant.now());
 
 		userRepository.save(user);

@@ -15,7 +15,7 @@ public class UserService {
 	private UserRepository userRepository;
 	
 	public UserDTO createUser(UserDTO userDto) {
-		
+			
 		User userDocumentExists  = userRepository.findUserByDocument(userDto.getDocument());
 		User userEmailExists  = userRepository.findUserByEmail(userDto.getEmail());
 		
@@ -26,8 +26,8 @@ public class UserService {
 		User user = new User(
 				null,
 				userDto.getDocument(),
-				userDto.getUser_client(),
-				userDto.getUser_secret(),
+				userDto.generateUserKey(),
+				userDto.generateUserSecret(),
 				userDto.getEmail(),
 				userDto.getName(),
 				userDto.getRecovery_pass_token(),
@@ -35,6 +35,7 @@ public class UserService {
 				);
 		
 		user =  userRepository.save(user);
+		user.setUser_secret(userDto.getUser_secret());
 		return new UserDTO(user);
 	}
 		
