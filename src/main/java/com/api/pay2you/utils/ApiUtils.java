@@ -10,7 +10,7 @@ public class ApiUtils {
         final String LOWERCASE_CHARS = "abcdefghijklmnopqrstuvwxyz";
         final String SPECIAL_CHARS = "!@#$%^&*()-_=+[{]};:'\"\\|<,>.?/";
         final String ALL_CHARS = UPPERCASE_CHARS + LOWERCASE_CHARS + SPECIAL_CHARS;
-        final int PASSWORD_LENGTH = 10;
+        final int PASSWORD_LENGTH = 25;
     	
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder();
