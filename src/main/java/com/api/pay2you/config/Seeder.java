@@ -1,7 +1,6 @@
 package com.api.pay2you.config;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 
 import com.api.pay2you.entities.User;
 import com.api.pay2you.repositories.UserRepository;
-import com.api.pay2you.utils.ApiUtils;
 
 @Configuration
 @Profile("local")
@@ -24,10 +22,8 @@ public class Seeder implements CommandLineRunner {
 	private boolean seedEnabled;
 
 	private void seedUsersTable() {
-
-		String password = ApiUtils.PasswordEncode(ApiUtils.generatePassword());
-		
-		User user = new User(null, "57971474083", UUID.randomUUID(), password, "jxvxluiz@gmail.com",
+	
+		User user = new User(null, "57971474083", "jxvxluiz@gmail.com",
 				"João Luiz", "", Instant.now());
 
 		userRepository.save(user);

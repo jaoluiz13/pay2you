@@ -26,16 +26,13 @@ public class UserService {
 		User user = new User(
 				null,
 				userDto.getDocument(),
-				userDto.generateUserKey(),
-				userDto.generateUserSecret(),
 				userDto.getEmail(),
 				userDto.getName(),
-				userDto.getRecovery_pass_token(),
-				userDto.getCreated_at()				
+				userDto.getRecovery_pass_token()		
 				);
 		
 		user =  userRepository.save(user);
-		user.setUser_secret(userDto.getUser_secret());
+		user.setUser_secret(user.getUser_secret_plain_text());
 		return new UserDTO(user);
 	}
 		

@@ -7,11 +7,15 @@ import java.util.UUID;
 
 import com.api.pay2you.utils.ApiUtils;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "users")
@@ -25,28 +29,44 @@ public class User implements Serializable{
 	private String document;
 	private UUID user_key;
 	private String user_secret;
+	@Transient
+	private String user_secret_plain_text;
 	private String email;
 	private String name;
 	private String recovery_pass_token;
+	
+	@Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
 	private Instant created_at;
 	
 	public User() {
 		
 	}
 
-	public User(String id, String document, UUID user_key, String user_secret, String email, String name,
-			String recovery_pass_token, Instant created_at) {
+	public User(String id, String document, String email, String name,
+			String recovery_pass_token) {
 		super();
 		this.id = id;
 		this.document = document;
-		this.user_key = user_key;
-		this.user_secret = ApiUtils.PasswordEncode(user_secret);
+		this.user_key = generateUserKey();
+		this.user_secret = ApiUtils.PasswordEncode(generateUserSecret());
 		this.email = email;
 		this.name = name;
 		this.recovery_pass_token = recovery_pass_token;
-		this.created_at = created_at;
 	}
 
+	private UUID generateUserKey() {
+		UUID userKey = UUID.randomUUID();
+		setUser_key(userKey);
+		return userKey;
+	}
+	
+	public String generateUserSecret() {
+		String generatedPassword = ApiUtils.generatePassword();
+		setUser_secret_plain_text(generatedPassword);
+		return generatedPassword;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -67,7 +87,7 @@ public class User implements Serializable{
 		return user_key;
 	}
 
-	public void setUser_client(UUID user_key) {
+	public void setUser_key(UUID user_key) {
 		this.user_key = user_key;
 	}
 
@@ -136,6 +156,14 @@ public class User implements Serializable{
 		return "User [id=" + id + ", document=" + document + ", user_key=" + user_key + ", user_secret="
 				+ user_secret + ", email=" + email + ", name=" + name + ", recovery_pass_token=" + recovery_pass_token
 				+ ", created_at=" + created_at + "]";
+	}
+
+	public String getUser_secret_plain_text() {
+		return user_secret_plain_text;
+	}
+
+	public void setUser_secret_plain_text(String user_secret_plain_text) {
+		this.user_secret_plain_text = user_secret_plain_text;
 	}
 	
 }

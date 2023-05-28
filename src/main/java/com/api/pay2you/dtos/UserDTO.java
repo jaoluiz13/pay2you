@@ -32,12 +32,11 @@ public class UserDTO {
 		
 		this.id = id;
 		this.document = document;
-		this.user_key = generateUserKey();
-		this.user_secret = generateUserSecret();
+		this.user_key = null;
+		this.user_secret = null;
 		this.email = email;
 		this.name = name;
 		this.recovery_pass_token = recovery_pass_token;
-		this.created_at = Instant.now();
 	}
 
 	public UserDTO(User user) {
