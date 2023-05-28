@@ -15,7 +15,7 @@ public class UserDTO {
 	private static final long serialVersionUID = 1L;
 
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+	private UUID id;
 	private String document;
 	private UUID user_key;
 	private String user_secret;
@@ -28,9 +28,8 @@ public class UserDTO {
 
 	}
 
-	public UserDTO(String id, String document, String email, String name, String recovery_pass_token) {
+	public UserDTO( String document, String email, String name, String recovery_pass_token) {
 		
-		this.id = id;
 		this.document = document;
 		this.user_key = null;
 		this.user_secret = null;
@@ -40,7 +39,6 @@ public class UserDTO {
 	}
 
 	public UserDTO(User user) {
-		this.id = user.getId();
 		this.document = user.getDocument();
 		this.user_key = user.getUser_key();
 		this.user_secret = user.getUser_secret();
@@ -50,9 +48,6 @@ public class UserDTO {
 		this.created_at = user.getCreated_at();
 	}
 
-	public String getId() {
-		return id;
-	}
 
 	public UUID generateUserKey() {
 		UUID userKey = UUID.randomUUID();
@@ -72,10 +67,6 @@ public class UserDTO {
 
 	public void setUser_secret(String user_secret) {
 		this.user_secret = user_secret;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getDocument() {
@@ -141,7 +132,7 @@ public class UserDTO {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(created_at, other.getCreated_at()) && Objects.equals(document, other.getDocument())
-				&& Objects.equals(email, other.getEmail()) && Objects.equals(id, other.getId())
+				&& Objects.equals(email, other.getEmail())
 				&& Objects.equals(name, other.getName())
 				&& Objects.equals(recovery_pass_token, other.getRecovery_pass_token())
 				&& Objects.equals(user_key, other.getUser_key())

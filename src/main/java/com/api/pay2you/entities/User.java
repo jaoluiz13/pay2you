@@ -43,10 +43,9 @@ public class User implements Serializable{
 		
 	}
 
-	public User(String id, String document, String email, String name,
+	public User( String document, String email, String name,
 			String recovery_pass_token) {
 		super();
-		this.id = id;
 		this.document = document;
 		this.user_key = generateUserKey();
 		this.user_secret = ApiUtils.PasswordEncode(generateUserSecret());
@@ -55,7 +54,7 @@ public class User implements Serializable{
 		this.recovery_pass_token = recovery_pass_token;
 	}
 
-	private UUID generateUserKey() {
+	public UUID generateUserKey() {
 		UUID userKey = UUID.randomUUID();
 		setUser_key(userKey);
 		return userKey;
@@ -67,13 +66,6 @@ public class User implements Serializable{
 		return generatedPassword;
 	}
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getDocument() {
 		return document;

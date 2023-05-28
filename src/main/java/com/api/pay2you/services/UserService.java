@@ -1,5 +1,7 @@
 package com.api.pay2you.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +18,14 @@ public class UserService {
 	
 	public UserDTO createUser(UserDTO userDto) {
 			
-		User userDocumentExists  = userRepository.findUserByDocument(userDto.getDocument());
-		User userEmailExists  = userRepository.findUserByEmail(userDto.getEmail());
+		Optional<User> userDocumentExists  = userRepository.findUserByDocument(userDto.getDocument());
+		Optional<User> userEmailExists  = userRepository.findUserByEmail(userDto.getEmail());
 		
-		if(userDocumentExists != null || userEmailExists != null) {
+		if(userEmailExists.isPresent() || userEmailExists.isPresent()) {
 			throw new UserAlreadyExists("User's document or email already exists");
 		}
 		
 		User user = new User(
-				null,
 				userDto.getDocument(),
 				userDto.getEmail(),
 				userDto.getName(),

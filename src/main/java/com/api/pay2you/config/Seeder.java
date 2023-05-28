@@ -21,7 +21,7 @@ public class Seeder implements CommandLineRunner {
 
 	private void seedUsersTable() {
 
-		User user = new User(null, "57971474083", "jxvxluiz@gmail.com", "João Luiz", "");
+		User user = new User("57971474083", "jxvxluiz@gmail.com", "João Luiz", "");
 
 		userRepository.save(user);
 		System.out.println(user);
