@@ -1,7 +1,5 @@
 package com.api.pay2you.config;
 
-import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -22,9 +20,8 @@ public class Seeder implements CommandLineRunner {
 	private boolean seedEnabled;
 
 	private void seedUsersTable() {
-	
-		User user = new User(null, "57971474083", "jxvxluiz@gmail.com",
-				"João Luiz", "", Instant.now());
+
+		User user = new User(null, "57971474083", "jxvxluiz@gmail.com", "João Luiz", "");
 
 		userRepository.save(user);
 		System.out.println(user);
