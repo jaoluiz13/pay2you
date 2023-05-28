@@ -21,7 +21,7 @@ public class UserService {
 		Optional<User> userDocumentExists  = userRepository.findUserByDocument(userDto.getDocument());
 		Optional<User> userEmailExists  = userRepository.findUserByEmail(userDto.getEmail());
 		
-		if(userEmailExists.isPresent() || userEmailExists.isPresent()) {
+		if(userDocumentExists.isPresent() || userEmailExists.isPresent()) {
 			throw new UserAlreadyExists("User's document or email already exists");
 		}
 		
