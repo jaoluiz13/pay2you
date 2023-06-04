@@ -5,10 +5,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.pay2you.dtos.JwtDTO;
+import com.api.pay2you.dtos.LoginDTO;
 import com.api.pay2you.dtos.UserDTO;
 import com.api.pay2you.entities.User;
+import com.api.pay2you.exceptions.user.InvalidCredentials;
 import com.api.pay2you.exceptions.user.UserAlreadyExists;
 import com.api.pay2you.repositories.UserRepository;
+import com.api.pay2you.utils.ApiUtils;
+import com.api.pay2you.utils.Jwt;
 
 @Service
 public class UserService {
@@ -35,6 +40,25 @@ public class UserService {
 		user =  userRepository.save(user);
 		user.setUser_secret(user.getUser_secret_plain_text());
 		return new UserDTO(user);
+	}
+	
+	public JwtDTO login(LoginDTO login) {
+		
+		Optional<User> userExists = userRepository.findUserByKey(login.getUser_key());
+		
+		if(userExists.isEmpty()) {
+			throw new InvalidCredentials("Incorrect user key or secret!");
+		}
+		
+		Boolean passwordIsValid = ApiUtils.PasswordMatcher(login.getUser_secret(), userExists.get().getUser_secret());
+		
+		if(!passwordIsValid) {
+			throw new InvalidCredentials("Incorrect user key or secret!");
+		}
+		
+		JwtDTO createdJWT = new JwtDTO(Jwt.generateToken(userExists.get().getUser_key().toString()),"Bearer ",7200);
+		return createdJWT;
+		
 	}
 		
 }

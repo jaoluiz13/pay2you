@@ -3,7 +3,9 @@ package com.api.pay2you.utils;
 import java.security.SecureRandom;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ApiUtils {
 
 	public static String generatePassword() {

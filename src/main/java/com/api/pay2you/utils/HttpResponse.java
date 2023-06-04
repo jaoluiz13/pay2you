@@ -1,5 +1,8 @@
 package com.api.pay2you.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public  class HttpResponse {
 	 private String message;
 	    private int status;

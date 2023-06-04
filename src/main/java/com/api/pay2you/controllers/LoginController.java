@@ -8,25 +8,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.pay2you.dtos.UserDTO;
-import com.api.pay2you.exceptions.user.UserAlreadyExists;
+import com.api.pay2you.dtos.JwtDTO;
+import com.api.pay2you.dtos.LoginDTO;
+import com.api.pay2you.exceptions.user.InvalidCredentials;
 import com.api.pay2you.services.UserService;
 import com.api.pay2you.utils.HttpResponse;
 
 @RestController
-@RequestMapping(value = "/users")
-public class UserController {
+@RequestMapping()
+public class LoginController {
 
 	@Autowired
 	private UserService userService;
 
-	@PostMapping(path = "/create")
-	public ResponseEntity<?> createUser(@RequestBody UserDTO body) {
-
+	@PostMapping(path = "/login")
+	public ResponseEntity<?> login(@RequestBody LoginDTO body) {
 		try {
-			UserDTO user = userService.createUser(body);
-			return ResponseEntity.ok().body(user);
-		} catch (UserAlreadyExists error) {
+			JwtDTO loginIsValid = userService.login(body);
+			return ResponseEntity.ok().body(loginIsValid);
+		} catch (InvalidCredentials error) {
 
 			HttpResponse errorResponse = new HttpResponse();
 			errorResponse.setMessage(error.getMessage());
@@ -35,4 +35,5 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
+
 }
