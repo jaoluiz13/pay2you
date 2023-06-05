@@ -1,12 +1,12 @@
 package com.api.pay2you.dtos;
 
-import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
 import com.api.pay2you.entities.User;
-import com.api.pay2you.utils.ApiUtils;
+import com.api.pay2you.utils.Password;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -14,7 +14,8 @@ public class UserDTO {
 
 	private static final long serialVersionUID = 1L;
 
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(columnDefinition = "BINARY(16)")
 	private UUID id;
 	private String document;
 	private UUID user_key;
@@ -22,7 +23,7 @@ public class UserDTO {
 	private String email;
 	private String name;
 	private String recovery_pass_token;
-	private Instant created_at;
+	private java.util.Date created_at;
 
 	public UserDTO() {
 
@@ -56,7 +57,7 @@ public class UserDTO {
 	}
 
 	public String generateUserSecret() {
-		String generatedPassword = ApiUtils.generatePassword();
+		String generatedPassword = Password.generatePassword();
 		setUser_secret(generatedPassword);
 		return generatedPassword;
 	}
@@ -109,11 +110,11 @@ public class UserDTO {
 		this.recovery_pass_token = recovery_pass_token;
 	}
 
-	public Instant getCreated_at() {
+	public java.util.Date getCreated_at() {
 		return created_at;
 	}
 
-	public void setCreated_at(Instant created_at) {
+	public void setCreated_at(java.util.Date created_at) {
 		this.created_at = created_at;
 	}
 
@@ -149,5 +150,4 @@ public class UserDTO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 }

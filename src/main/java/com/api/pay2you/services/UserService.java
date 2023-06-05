@@ -12,11 +12,11 @@ import com.api.pay2you.entities.User;
 import com.api.pay2you.exceptions.user.InvalidCredentials;
 import com.api.pay2you.exceptions.user.UserAlreadyExists;
 import com.api.pay2you.repositories.UserRepository;
-import com.api.pay2you.utils.ApiUtils;
 import com.api.pay2you.utils.Jwt;
+import com.api.pay2you.utils.Password;
 
 @Service
-public class UserService {
+public class UserService{
 
 	@Autowired
 	private UserRepository userRepository;
@@ -50,7 +50,7 @@ public class UserService {
 			throw new InvalidCredentials("Incorrect user key or secret!");
 		}
 		
-		Boolean passwordIsValid = ApiUtils.PasswordMatcher(login.getUser_secret(), userExists.get().getUser_secret());
+		Boolean passwordIsValid = Password.PasswordMatcher(login.getUser_secret(), userExists.get().getUser_secret());
 		
 		if(!passwordIsValid) {
 			throw new InvalidCredentials("Incorrect user key or secret!");
@@ -59,6 +59,5 @@ public class UserService {
 		JwtDTO createdJWT = new JwtDTO(Jwt.generateToken(userExists.get().getUser_key().toString()),"Bearer ",7200);
 		return createdJWT;
 		
-	}
-		
+	}	
 }

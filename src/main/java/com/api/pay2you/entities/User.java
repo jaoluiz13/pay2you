@@ -1,11 +1,11 @@
 package com.api.pay2you.entities;
 
+
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.api.pay2you.utils.ApiUtils;
+import com.api.pay2you.utils.Password;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,39 +19,48 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 	private String document;
+	
 	private UUID user_key;
 	private String user_secret;
-	@Transient
-	private String user_secret_plain_text;
 	private String email;
 	private String name;
 	private String recovery_pass_token;
-	
+
 	@Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-	private Instant created_at;
+	@Temporal(TemporalType.TIMESTAMP)
+	private java.util.Date created_at;
+
 	
+	@Transient
+	private String user_secret_plain_text;
+
 	public User() {
-		
+
 	}
 
-	public User( String document, String email, String name,
-			String recovery_pass_token) {
-		super();
+	public User(String document, String email, String name, String recovery_pass_token) {
 		this.document = document;
 		this.user_key = generateUserKey();
-		this.user_secret = ApiUtils.PasswordEncode(generateUserSecret());
+		this.user_secret = Password.PasswordEncode(generateUserSecret());
 		this.email = email;
 		this.name = name;
 		this.recovery_pass_token = recovery_pass_token;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public UUID generateUserKey() {
@@ -59,13 +68,13 @@ public class User implements Serializable{
 		setUser_key(userKey);
 		return userKey;
 	}
-	
+
 	public String generateUserSecret() {
-		String generatedPassword = ApiUtils.generatePassword();
+		String generatedPassword = Password.generatePassword();
+		System.out.println(generatedPassword);
 		setUser_secret_plain_text(generatedPassword);
 		return generatedPassword;
 	}
-	
 
 	public String getDocument() {
 		return document;
@@ -115,11 +124,11 @@ public class User implements Serializable{
 		this.recovery_pass_token = recovery_pass_token;
 	}
 
-	public Instant getCreated_at() {
+	public java.util.Date getCreated_at() {
 		return created_at;
 	}
 
-	public void setCreated_at(Instant created_at) {
+	public void setCreated_at(java.util.Date created_at) {
 		this.created_at = created_at;
 	}
 
@@ -145,8 +154,8 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", document=" + document + ", user_key=" + user_key + ", user_secret="
-				+ user_secret + ", email=" + email + ", name=" + name + ", recovery_pass_token=" + recovery_pass_token
+		return "User [id=" + id + ", document=" + document + ", user_key=" + user_key + ", user_secret=" + user_secret
+				+ ", email=" + email + ", name=" + name + ", recovery_pass_token=" + recovery_pass_token
 				+ ", created_at=" + created_at + "]";
 	}
 
@@ -157,5 +166,5 @@ public class User implements Serializable{
 	public void setUser_secret_plain_text(String user_secret_plain_text) {
 		this.user_secret_plain_text = user_secret_plain_text;
 	}
-	
+
 }

@@ -15,7 +15,7 @@ import com.api.pay2you.services.UserService;
 import com.api.pay2you.utils.HttpResponse;
 
 @RestController
-@RequestMapping()
+@RequestMapping
 public class LoginController {
 
 	@Autowired
@@ -27,7 +27,6 @@ public class LoginController {
 			JwtDTO loginIsValid = userService.login(body);
 			return ResponseEntity.ok().body(loginIsValid);
 		} catch (InvalidCredentials error) {
-
 			HttpResponse errorResponse = new HttpResponse();
 			errorResponse.setMessage(error.getMessage());
 			errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -35,5 +34,4 @@ public class LoginController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
-
 }
