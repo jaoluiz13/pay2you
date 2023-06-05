@@ -15,7 +15,7 @@ public class FilterToken {
 	@Autowired
 	private UserRepository userRepository;
 
-	public Boolean filter(String header) {
+	public Boolean authFilter(String header) {
 		String token;
 
 		if (header != null) {

@@ -11,6 +11,7 @@ import com.api.pay2you.dtos.UserDTO;
 import com.api.pay2you.entities.User;
 import com.api.pay2you.exceptions.user.InvalidCredentials;
 import com.api.pay2you.exceptions.user.UserAlreadyExists;
+import com.api.pay2you.exceptions.user.UserNotFound;
 import com.api.pay2you.repositories.UserRepository;
 import com.api.pay2you.utils.Jwt;
 import com.api.pay2you.utils.Password;
@@ -60,4 +61,16 @@ public class UserService{
 		return createdJWT;
 		
 	}	
+	
+	public UserDTO findUserByEmail(String email) {
+		
+		Optional<User> userExists  = userRepository.findUserByEmail(email);
+		
+		if(userExists.isEmpty()) {
+			throw new UserNotFound("User Not Found");
+		}
+		
+		UserDTO user = new UserDTO(userExists.get());
+		return user;
+	}
 }
